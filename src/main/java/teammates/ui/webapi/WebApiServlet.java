@@ -91,6 +91,9 @@ public class WebApiServlet extends HttpServlet {
             action.init(req);
             action.checkAccessControl();
 
+            //output Class from Action Factory
+            System.out.println(action);
+
             ActionResult result = action.execute();
             result.send(resp);
         } catch (ActionMappingException e) {
