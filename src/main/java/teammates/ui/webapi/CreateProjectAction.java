@@ -43,9 +43,10 @@ class CreateProjectAction extends Action {
         ProjectCreateRequest createRequest =
                 getAndValidateRequestBody(ProjectCreateRequest.class);
 
-        String projectName = SanitizationHelper.sanitizeTitle(createRequest.getFeedbackSessionName());
+        String projectName = SanitizationHelper.sanitizeTitle(createRequest.getProjectName());
 
         //TODO: make sure Tri names ProjectAttribute name as
+/*
         ProjectAttributes ps =
                 ProjectAttributes
                         .builder(projectName, course.getId())
@@ -63,18 +64,20 @@ class CreateProjectAction extends Action {
 
         try {
             //TODO: get method name from Michael for createProject
-            logic.createFeedbackSession(ps);
+            logic.createProject(ps);
         } catch (EntityAlreadyExistsException | InvalidParametersException e) {
             throw new InvalidHttpRequestBodyException(e.getMessage(), e);
         }
 
         //TODO: update with method names from ProjectAttribute class
-        ps = getNonNullFeedbackSession(ps.getFeedbackSessionName(), ps.getCourseId());
+        ps = getNonNullFeedbackSession(ps.getProjectName(), ps.getCourseId());
         ProjectData output = new ProjectData(ps);
         InstructorPrivilegeData privilege = constructInstructorPrivileges(instructor, projectName);
         output.setPrivileges(privilege);
+*/
 
-        return new JsonResult(output);
+        //return new JsonResult(output);
+        return new JsonResult("Test");
     }
 
 }

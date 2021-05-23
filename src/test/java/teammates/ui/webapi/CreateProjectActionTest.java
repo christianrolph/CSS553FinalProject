@@ -6,18 +6,43 @@ import teammates.common.datatransfer.attributes.CourseAttributes;
 import teammates.common.datatransfer.attributes.ProjectAttributes;
 import teammates.common.datatransfer.attributes.InstructorAttributes;
 import teammates.common.exception.InvalidHttpRequestBodyException;
-import teammates.common.util.Const;
-import teammates.common.util.StringHelperExtension;
+import teammates.common.util.*;
 import teammates.ui.output.ProjectData;
 import teammates.ui.output.ResponseVisibleSetting;
 import teammates.ui.output.SessionVisibleSetting;
 import teammates.ui.request.ProjectCreateRequest;
+
 
 /**
  * SUT: {@link CreateFeedbackSessionAction}.
  */
 public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction> {
 
+    private static final Logger log = Logger.getLogger();
+
+    @Override
+    protected String getActionUri() {
+        return null;
+    }
+
+    @Override
+    protected String getRequestMethod() {
+        return null;
+    }
+
+    @Test
+    @Override
+    protected void testExecute() throws Exception {
+        log.info("hello");
+        assertEquals("HELLO Assert Test",4, 5);
+    }
+
+    @Override
+    protected void testAccessControl() throws Exception {
+
+    }
+
+/*
     @Override
     protected String getActionUri() {
         return Const.ResourceURIs.PROJECT;
@@ -159,7 +184,7 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
     private ProjectCreateRequest getTypicalCreateRequest() {
         ProjectCreateRequest createRequest =
                 new ProjectCreateRequest();
-        createRequest.setFeedbackSessionName("new feedback session");
+        createRequest.setProjectName("new feedback session");
         createRequest.setInstructions("instructions");
 
         createRequest.setSubmissionStartTimestamp(1444003051000L);
@@ -190,5 +215,6 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         verifyOnlyInstructorsOfTheSameCourseWithCorrectCoursePrivilegeCanAccess(
                 Const.InstructorPermissions.CAN_MODIFY_SESSION, params);
     }
+*/
 
 }

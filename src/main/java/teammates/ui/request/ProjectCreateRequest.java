@@ -3,22 +3,22 @@ package teammates.ui.request;
 /**
  * The request body format for creation of feedback session.
  */
-public class ProjectCreateRequest extends FeedbackSessionBasicRequest {
-    private String feedbackSessionName;
+public class ProjectCreateRequest extends ProjectBasicRequest {
+    private String projectName;
 
-    public String getFeedbackSessionName() {
-        return feedbackSessionName;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setFeedbackSessionName(String feedbackSessionName) {
-        this.feedbackSessionName = feedbackSessionName;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     @Override
     public void validate() {
         super.validate();
 
-        assertTrue(feedbackSessionName != null, "Session name cannot be null");
-        assertTrue(!feedbackSessionName.isEmpty(), "Session name cannot be empty");
+        assertTrue(projectName != null, "Session name cannot be null");
+        assertTrue(!projectName.isEmpty(), "Session name cannot be empty");
     }
 }
