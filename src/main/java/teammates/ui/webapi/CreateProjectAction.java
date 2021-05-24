@@ -40,13 +40,15 @@ class CreateProjectAction extends Action {
         InstructorAttributes instructor = logic.getInstructorForGoogleId(courseId, userInfo.getId());
         CourseAttributes course = logic.getCourse(courseId);
 
+        // Reads HTTP json data and returns a ProjectCreateRequest and validates
+        // data by using createRequest.validate()
         ProjectCreateRequest createRequest =
                 getAndValidateRequestBody(ProjectCreateRequest.class);
 
+        // removes whitespace from project name received in HTTP data
         String projectName = SanitizationHelper.sanitizeTitle(createRequest.getProjectName());
-
-        //TODO: make sure Tri names ProjectAttribute name as
 /*
+
         ProjectAttributes ps =
                 ProjectAttributes
                         .builder(projectName, course.getId())
@@ -75,6 +77,7 @@ class CreateProjectAction extends Action {
         InstructorPrivilegeData privilege = constructInstructorPrivileges(instructor, projectName);
         output.setPrivileges(privilege);
 */
+
 
         //return new JsonResult(output);
         return new JsonResult("Test");
