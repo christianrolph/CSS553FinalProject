@@ -1,15 +1,18 @@
 package teammates.common.datatransfer.attributes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import teammates.logic.core.StudentsLogic;
 import teammates.ui.output.Milestone;
+import teammates.common.datatransfer.attributes.EntityAttributes;
+import teammates.storage.entity.Project;
 
 /**
  *
  * @author Tri27
  */
-public class ProjectAttributes {
+public class ProjectAttributes extends EntityAttributes<Project> {
 
     private String projectName;
     private Milestone ms;
@@ -51,5 +54,23 @@ public class ProjectAttributes {
 
     public boolean checkMilestone(){
         return ms.isIsFinished();
+    }
+
+    // TODO finish implementing method
+    @Override
+    public List<String> getInvalidityInfo() {
+        return null;
+    }
+
+    // TODO finish implementing method
+    @Override
+    public Project toEntity() {
+        return null;
+    }
+
+    // TODO finish implementing method
+    @Override
+    public void sanitizeForSaving() {
+
     }
 }

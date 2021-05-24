@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 //Import CSV/file database writer/reader
 
+import com.googlecode.objectify.cmd.LoadType;
 import teammates.common.datatransfer.attributes.ProjectAttributes;
 import teammates.storage.entity.Project;
 import teammates.common.util.Assumption;
@@ -28,7 +29,26 @@ import teammates.common.exception.InvalidParametersException;
  */
 public class ProjectsDb extends EntitiesDb<Project, ProjectAttributes> {
   //no parameters
-  
+
+    // TODO finish implementing this method
+    @Override
+    public boolean hasExistingEntities(ProjectAttributes entityToCreate)
+    {
+        return false;
+    }
+
+    // TODO finish implementing this method
+    @Override
+    LoadType<Project> load() {
+        return null;
+    }
+
+    // TODO finish implementing this method
+    @Override
+    ProjectAttributes makeAttributes(Project entity) {
+        return null;
+    }
+
   
   //createProject
     //see the EntitiesDb class for createEntity flow

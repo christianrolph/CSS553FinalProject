@@ -10,15 +10,15 @@ import teammates.storage.api.ProjectsDb;
  * through the backend into the system database
  */
 
-public final class ProjectLogic {
-    private static ProjectLogic instance = new ProjectLogic();
-    private statis final ProjectsDb projDb = new ProjectsDb();
+public final class ProjectsLogic {
+    private static ProjectsLogic instance = new ProjectsLogic();
+    private static final ProjectsDb projDb = new ProjectsDb();
     
-    private ProjectLogic(){
+    private ProjectsLogic(){
     	// prevent initialization
     }
     //inst()
-    public static ProjectLogic inst() {
+    public static ProjectsLogic inst() {
         return instance;
     }
     

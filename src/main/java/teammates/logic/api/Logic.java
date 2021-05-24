@@ -1358,5 +1358,6 @@ public class Logic {
     public ProjectAttributes createProject(ProjectAttributes project) throws InvalidParametersException, EntityAlreadyExistsException {
         Assumption.assertNotNull(project.getProjectName()); //does this method exist in the projectAttributes class?
         return projectsLogic.createProject(project);
+    }
 
 }
