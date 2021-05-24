@@ -39,6 +39,11 @@ import teammates.logic.core.InstructorsLogic;
 import teammates.logic.core.ProfilesLogic;
 import teammates.logic.core.StudentsLogic;
 
+//Project imports
+import teammates.logic.core.ProjectsLogic;
+import teammates.common.datatransfer.attributes.ProjectAttributes;
+
+
 /**
  * Provides the business logic for production usage of the system.
  *
@@ -57,6 +62,9 @@ public class Logic {
             FeedbackResponseCommentsLogic.inst();
     protected static final ProfilesLogic profilesLogic = ProfilesLogic.inst();
     protected static final DataBundleLogic dataBundleLogic = DataBundleLogic.inst();
+    
+    //Project addition
+    protected static final ProjectsLogic projectsLogic = ProjectsLogic.inst();
 
     /**
      * Preconditions: <br>
@@ -1345,5 +1353,10 @@ public class Logic {
         Assumption.assertNotNull(student2Email);
         return studentsLogic.isStudentsInSameTeam(courseId, student1Email, student2Email);
     }
+    
+    //Creates Project
+    public ProjectAttributes createProject(ProjectAttributes project) throws InvalidParametersException, EntityAlreadyExistsException {
+        Assumption.assertNotNull(project.getProjectName()); //does this method exist in the projectAttributes class?
+        return projectsLogic.createProject(project);
 
 }
