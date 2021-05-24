@@ -7,10 +7,15 @@ import teammates.common.datatransfer.attributes.ProjectAttributes;
 import teammates.common.datatransfer.attributes.InstructorAttributes;
 import teammates.common.exception.InvalidHttpRequestBodyException;
 import teammates.common.util.*;
+import teammates.logic.core.StudentsLogic;
+import teammates.ui.output.Milestone;
 import teammates.ui.output.ProjectData;
 import teammates.ui.output.ResponseVisibleSetting;
 import teammates.ui.output.SessionVisibleSetting;
 import teammates.ui.request.ProjectCreateRequest;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
@@ -20,6 +25,7 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
 
     private static final Logger log = Logger.getLogger();
 
+/*
     @Override
     protected String getActionUri() {
         return null;
@@ -41,8 +47,8 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
     protected void testAccessControl() throws Exception {
 
     }
+*/
 
-/*
     @Override
     protected String getActionUri() {
         return Const.ResourceURIs.PROJECT;
@@ -79,7 +85,7 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
 
         assertEquals(HttpStatus.SC_OK, r.getStatusCode());
         ProjectData response = (ProjectData) r.getOutput();
-
+/*
         ProjectAttributes createdProject =
                 //TODO: get logic method name from Michael
                 logic.getFeedbackSession(createRequest.getProjectName(), course.getId());
@@ -159,6 +165,7 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         response = (ProjectData) r.getOutput();
 
         assertEquals("Name with extra space", response.getFeedbackSessionName());
+*/
     }
 
     @Test
@@ -184,21 +191,26 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
     private ProjectCreateRequest getTypicalCreateRequest() {
         ProjectCreateRequest createRequest =
                 new ProjectCreateRequest();
-        createRequest.setProjectName("new feedback session");
-        createRequest.setInstructions("instructions");
+        createRequest.setProjectName("new project");
+        createRequest.setMs(new Milestone("Milestone 1", "Assignment 1 complete", new Date()));
+        createRequest.setStudentList(new ArrayList<StudentsLogic>());
 
-        createRequest.setSubmissionStartTimestamp(1444003051000L);
-        createRequest.setSubmissionEndTimestamp(1546003051000L);
-        createRequest.setGracePeriod(5);
 
-        createRequest.setSessionVisibleSetting(SessionVisibleSetting.CUSTOM);
-        createRequest.setCustomSessionVisibleTimestamp(1440003051000L);
 
-        createRequest.setResponseVisibleSetting(ResponseVisibleSetting.CUSTOM);
-        createRequest.setCustomResponseVisibleTimestamp(1547003051000L);
+        //createRequest.setInstructions("instructions");
 
-        createRequest.setClosingEmailEnabled(false);
-        createRequest.setPublishedEmailEnabled(false);
+        //createRequest.setSubmissionStartTimestamp(1444003051000L);
+        //createRequest.setSubmissionEndTimestamp(1546003051000L);
+        //createRequest.setGracePeriod(5);
+
+        //createRequest.setSessionVisibleSetting(SessionVisibleSetting.CUSTOM);
+        //createRequest.setCustomSessionVisibleTimestamp(1440003051000L);
+
+        //createRequest.setResponseVisibleSetting(ResponseVisibleSetting.CUSTOM);
+        //createRequest.setCustomResponseVisibleTimestamp(1547003051000L);
+
+        //createRequest.setClosingEmailEnabled(false);
+        //createRequest.setPublishedEmailEnabled(false);
 
         return createRequest;
     }
@@ -215,6 +227,5 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         verifyOnlyInstructorsOfTheSameCourseWithCorrectCoursePrivilegeCanAccess(
                 Const.InstructorPermissions.CAN_MODIFY_SESSION, params);
     }
-*/
 
 }

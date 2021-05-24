@@ -11,9 +11,10 @@ import teammates.ui.output.Milestone;
  */
 public class ProjectAttributes {
 
-    private String teamName;
+    private String projectName;
     private Milestone ms;
     private ArrayList<StudentsLogic> studentList;
+
     public ProjectAttributes(){
 
     }
@@ -28,12 +29,16 @@ public class ProjectAttributes {
         return true;
     }
 
-    public String getTeamName() {
-        return teamName;
+    public ArrayList<StudentsLogic> getStudentList() {
+        return studentList;
     }
 
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String teamName) {
+        this.projectName = projectName;
     }
 
     public Milestone getMs() {
@@ -44,7 +49,7 @@ public class ProjectAttributes {
         this.ms = ms;
     }
 
-    public boolean checkMilstone(){
+    public boolean checkMilestone(){
         return ms.isIsFinished();
     }
 }
