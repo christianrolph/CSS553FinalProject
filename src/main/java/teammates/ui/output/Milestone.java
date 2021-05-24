@@ -14,13 +14,13 @@ public class Milestone {
     private boolean isFinished = false;
 
     public Milestone(){
-
     }
 
     public Milestone(String name, String des, Date date){
         this.name = name;
         this.description = des;
         this.date = date;
+        this.isFinished = false;
     }
 
     public String getName() {
@@ -53,6 +53,16 @@ public class Milestone {
 
     public void setIsFinished(boolean isFinished) {
         this.isFinished = isFinished;
+    }
+
+    public String toString() {
+        return
+            "Milestone ["
+            + "name = " + this.name
+            + ", description = " + this.description
+            + ", date = " + this.date
+            + ", isFinished = " + this.isFinished
+            +"]";
     }
 
 

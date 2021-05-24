@@ -4,10 +4,6 @@ import teammates.common.datatransfer.attributes.ProjectAttributes;
 import teammates.logic.core.StudentsLogic;
 
 import java.util.ArrayList;
-import teammates.common.util.Const;
-
-import javax.annotation.Nullable;
-import java.time.Instant;
 
 /**
  * The API output format of {@link ProjectAttributes}.
@@ -22,7 +18,7 @@ public class ProjectData extends ApiOutput {
 
     public ProjectData(ProjectAttributes projectAttributes){
         this.projectName = projectAttributes.getProjectName();
-        this.ms = projectAttributes.getMs();
+        this.ms = projectAttributes.getProjMilestone();
         this.studentList = projectAttributes.getStudentList();
     }
 

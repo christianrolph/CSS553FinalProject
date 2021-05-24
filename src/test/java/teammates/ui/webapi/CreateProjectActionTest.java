@@ -60,15 +60,30 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
     }
 
     @Test
-    @Override
-    protected void testExecute() throws Exception {
-
+    protected void testProjectAttributesBuilder() throws Exception {
+        log.info("Test Begins.");
         System.out.println("Hello, world!");
         log.info("The testExecute method is running for the CreateProjectActionTest");
         assertEquals("Test assertion for the CreateProjectActionTest method: 5==5", 5, 5);
 
-        /*
-        TODO: Update test below once other components are assembled
+        String testProjectName = "CSS 553 Final Project";
+        Date testDate = new Date();
+        Milestone testMilestone = new Milestone("Final Presentation", "This is desc for final presentation", testDate);
+
+        log.info("Creating the ProjectAttributes class with project name " + testProjectName);
+        ProjectAttributes ps =
+                ProjectAttributes
+                        .builder(testProjectName)
+                        .withMilestone(testMilestone)
+                        .build();
+
+        log.info("Printing the Project Attributes: " + ps);
+        log.info("Test complete.");
+    }
+
+    @Test
+    @Override
+    protected void testExecute() throws Exception {
 
         InstructorAttributes instructor1ofCourse1 = typicalBundle.instructors.get("instructor1OfCourse1");
 
@@ -93,8 +108,6 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
 
         assertEquals(HttpStatus.SC_OK, r.getStatusCode());
         ProjectData response = (ProjectData) r.getOutput();
-        */
-
 
 
 /*
