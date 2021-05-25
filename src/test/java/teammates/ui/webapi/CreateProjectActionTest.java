@@ -1,13 +1,17 @@
 package teammates.ui.webapi;
 
 import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.testng.annotations.Test;
 import teammates.common.datatransfer.attributes.CourseAttributes;
 import teammates.common.datatransfer.attributes.ProjectAttributes;
 import teammates.common.datatransfer.attributes.InstructorAttributes;
+import teammates.common.exception.ActionMappingException;
 import teammates.common.exception.InvalidHttpRequestBodyException;
 import teammates.common.util.*;
 import teammates.logic.core.StudentsLogic;
+import teammates.test.MockHttpServletRequest;
 import teammates.ui.output.Milestone;
 import teammates.ui.output.ProjectData;
 import teammates.ui.output.ResponseVisibleSetting;
@@ -58,6 +62,25 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
     protected String getRequestMethod() {
         return POST;
     }
+
+    @Test
+    protected void testActionFactoryCreateProjectAction() throws Exception {
+        log.info("Test Begins.");
+        log.info("Test to verify ActionFactory returns CreateProjectAction class");
+
+        ActionFactory actionFactory = new ActionFactory();
+
+        ______TS("Action exists and is retrieved");
+
+        MockHttpServletRequest existingActionServletRequest = new MockHttpServletRequest(
+                HttpPost.METHOD_NAME, Const.ResourceURIs.PROJECT);
+        existingActionServletRequest.addHeader("Backdoor-Key", Config.BACKDOOR_KEY);
+        Action existingAction = actionFactory.getAction(existingActionServletRequest, HttpPost.METHOD_NAME);
+        assertTrue(existingAction instanceof CreateProjectAction);
+        log.info("Test class type: " + existingAction);
+        log.info("Test complete.");
+    }
+
 
     @Test
     protected void testProjectAttributesBuilder() throws Exception {
@@ -217,7 +240,7 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         ProjectCreateRequest createRequest =
                 new ProjectCreateRequest();
         createRequest.setProjectName("new project");
-        createRequest.setMs(new Milestone("Milestone 1", "Assignment 1 complete", new Date()));
+        createRequest.setMilestone(new Milestone("Milestone 1", "Assignment 1 complete", new Date()));
         createRequest.setStudentList(new ArrayList<StudentsLogic>());
 
 

@@ -47,21 +47,11 @@ class CreateProjectAction extends Action {
 
         // removes whitespace from project name received in HTTP data
         String projectName = SanitizationHelper.sanitizeTitle(createRequest.getProjectName());
-/*
 
         ProjectAttributes ps =
                 ProjectAttributes
-                        .builder(projectName, course.getId())
-                        .withCreatorEmail(instructor.getEmail())
-                        .withTimeZone(course.getTimeZone())
-                        .withInstructions(createRequest.getInstructions())
-                        .withStartTime(createRequest.getSubmissionStartTime())
-                        .withEndTime(createRequest.getSubmissionEndTime())
-                        .withGracePeriod(createRequest.getGracePeriod())
-                        .withSessionVisibleFromTime(createRequest.getSessionVisibleFromTime())
-                        .withResultsVisibleFromTime(createRequest.getResultsVisibleFromTime())
-                        .withIsClosingEmailEnabled(createRequest.isClosingEmailEnabled())
-                        .withIsPublishedEmailEnabled(createRequest.isPublishedEmailEnabled())
+                        .builder(projectName)
+                        .withMilestone(createRequest.getMilestone())
                         .build();
 
         try {
@@ -72,11 +62,10 @@ class CreateProjectAction extends Action {
         }
 
         //TODO: update with method names from ProjectAttribute class
-        ps = getNonNullFeedbackSession(ps.getProjectName(), ps.getCourseId());
+        //ps = getNonNullFeedbackSession(ps.getProjectName(), ps.getCourseId());
         ProjectData output = new ProjectData(ps);
         InstructorPrivilegeData privilege = constructInstructorPrivileges(instructor, projectName);
         output.setPrivileges(privilege);
-*/
 
 
         //return new JsonResult(output);

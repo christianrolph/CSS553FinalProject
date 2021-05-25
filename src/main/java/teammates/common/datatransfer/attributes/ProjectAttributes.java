@@ -56,7 +56,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         return projectName;
     }
 
-    public void setProjectName(String teamName) {
+    public void setProjectName(String projectName) {
         this.projectName = projectName;
     }
 

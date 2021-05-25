@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class ProjectCreateRequest extends BasicRequest {
     private String projectName;
-    private Milestone ms;
+    private Milestone milestone;
     private ArrayList<StudentsLogic> studentList;
 
     public String getProjectName() {
@@ -20,11 +20,11 @@ public class ProjectCreateRequest extends BasicRequest {
         this.projectName = projectName;
     }
 
-    public Milestone getMs() {
-        return ms;
+    public Milestone getMilestone() {
+        return milestone;
     }
-    public void setMs(Milestone milestone) {
-        this.ms = milestone;
+    public void setMilestone(Milestone milestone) {
+        this.milestone = milestone;
     }
 
     public ArrayList<StudentsLogic> getStudentList() {
@@ -39,7 +39,7 @@ public class ProjectCreateRequest extends BasicRequest {
     @Override
     public void validate() {
         assertTrue(projectName != null, "Project name cannot be null");
-        assertTrue(ms != null, "Milestone cannot be null");
+        assertTrue(milestone != null, "Milestone cannot be null");
         assertTrue(studentList != null, "Student list cannot be empty");
     }
 }
