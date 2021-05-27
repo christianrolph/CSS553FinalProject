@@ -61,7 +61,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         this.projectName = projectName;
     }
 
-    public ArrayList<Milestone> getProjMilestons() {
+    public ArrayList<Milestone> getProjMilestones() {
         return projMilestones;
     }
 
@@ -80,6 +80,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     @Override
     public String toString(){
         return "projectName = " + this.projectName
+                + ", courseID = " + this.courseID
                 + ", milestones = " + this.projMilestones
                 + ", studentList = " + this.studentList;
     }
@@ -107,6 +108,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     public void update(UpdateOptions updateOptions) {
         updateOptions.milestonesOption.ifPresent(pM -> projMilestones = pM);
         updateOptions.studentsListOption.ifPresent(sL -> studentList = sL);
+        updateOptions.courseIdOption.ifPresent(cID -> courseID = cID);
     }
 
     /**
@@ -146,6 +148,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
 
         private UpdateOption<ArrayList<Milestone>> milestonesOption = UpdateOption.empty();
         private UpdateOption<ArrayList<String>> studentsListOption = UpdateOption.empty();
+        private UpdateOption<String> courseIdOption = UpdateOption.empty();
 
         // Constructor requires non-null project name
         private UpdateOptions(String projectName) {
@@ -200,7 +203,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
             this.updateOptions = updateOptions;
         }
 
-        public B withMilestone(ArrayList<Milestone> ms) {
+        public B withMilestones(ArrayList<Milestone> ms) {
             Assumption.assertNotNull(ms);
 
             updateOptions.milestonesOption = UpdateOption.of(ms);
@@ -211,6 +214,13 @@ public class ProjectAttributes extends EntityAttributes<Project> {
             Assumption.assertNotNull(studentList);
 
             updateOptions.studentsListOption = UpdateOption.of(studentList);
+            return thisBuilder;
+        }
+
+        public B withCourseId(String courseId) {
+            Assumption.assertNotNull(courseId);
+
+            updateOptions.courseIdOption = UpdateOption.of(courseId);
             return thisBuilder;
         }
 

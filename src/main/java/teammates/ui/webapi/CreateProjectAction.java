@@ -51,7 +51,7 @@ class CreateProjectAction extends Action {
         ProjectAttributes ps =
                 ProjectAttributes
                         .builder(projectName)
-                        .withMilestone(createRequest.getMilestone())
+                        .withMilestones(createRequest.getProjMilestones())
                         .build();
 
         try {
