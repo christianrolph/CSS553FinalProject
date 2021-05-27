@@ -2,23 +2,19 @@ package teammates.ui.webapi;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.testng.annotations.Test;
 import teammates.common.datatransfer.attributes.CourseAttributes;
 import teammates.common.datatransfer.attributes.ProjectAttributes;
 import teammates.common.datatransfer.attributes.InstructorAttributes;
-import teammates.common.exception.ActionMappingException;
-import teammates.common.exception.InvalidHttpRequestBodyException;
 import teammates.common.util.*;
 import teammates.logic.core.StudentsLogic;
 import teammates.test.MockHttpServletRequest;
 import teammates.ui.output.Milestone;
 import teammates.ui.output.ProjectData;
-import teammates.ui.output.ResponseVisibleSetting;
-import teammates.ui.output.SessionVisibleSetting;
 import teammates.ui.request.ProjectCreateRequest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 
@@ -85,19 +81,26 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
     @Test
     protected void testProjectAttributesBuilder() throws Exception {
         log.info("Test Begins.");
-        System.out.println("Hello, world!");
         log.info("The testExecute method is running for the CreateProjectActionTest");
         assertEquals("Test assertion for the CreateProjectActionTest method: 5==5", 5, 5);
 
+        // create mock objects
         String testProjectName = "CSS 553 Final Project";
-        Date testDate = new Date();
-        Milestone testMilestone = new Milestone("Final Presentation", "This is desc for final presentation", testDate);
+        ArrayList<Milestone> milestonesList = new ArrayList<Milestone>();
+        Milestone testMilestone1 = new Milestone("Final Presentation Milestone", "Description of final presentation requirements.", new Date());
+        Milestone testMilestone2 = new Milestone("Final Implementation Milestone", "Description of implementaiton requirements.", new Date());
+        milestonesList.add(testMilestone1);
+        milestonesList.add(testMilestone2);
+        ArrayList<String> mockStudentList = new ArrayList<String>(Arrays.asList("bob@gmail.com", "alice@gmail.com", "sally@gmail.com"));
 
+        // create project attributes with given mock data
         log.info("Creating the ProjectAttributes class with project name " + testProjectName);
         ProjectAttributes ps =
                 ProjectAttributes
                         .builder(testProjectName)
-                        .withMilestone(testMilestone)
+                        .withCourseId("86753")
+                        .withMilestones(milestonesList)
+                        .withStudentList(mockStudentList)
                         .build();
 
         log.info("Printing the Project Attributes: " + ps);
@@ -236,11 +239,16 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         assertEquals(HttpStatus.SC_OK, r.getStatusCode());
     }
 
+
     private ProjectCreateRequest getTypicalCreateRequest() {
+        ArrayList<Milestone> milestonesList = new ArrayList<Milestone>();
+        Milestone testMilestone = new Milestone("Milestone 1", "Description for Milestone 1", new Date());
+        milestonesList.add(testMilestone);
+
         ProjectCreateRequest createRequest =
                 new ProjectCreateRequest();
         createRequest.setProjectName("new project");
-        createRequest.setMilestone(new Milestone("Milestone 1", "Assignment 1 complete", new Date()));
+        createRequest.setProjMilestones(milestonesList);
         createRequest.setStudentList(new ArrayList<StudentsLogic>());
 
 
