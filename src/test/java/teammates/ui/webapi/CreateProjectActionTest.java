@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import teammates.common.datatransfer.attributes.CourseAttributes;
 import teammates.common.datatransfer.attributes.ProjectAttributes;
 import teammates.common.datatransfer.attributes.InstructorAttributes;
+import teammates.common.exception.InvalidHttpRequestBodyException;
 import teammates.common.util.*;
 import teammates.logic.core.StudentsLogic;
 import teammates.test.MockHttpServletRequest;
@@ -15,6 +16,7 @@ import teammates.ui.request.ProjectCreateRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -24,30 +26,6 @@ import java.util.Date;
 public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction> {
 
     private static final Logger log = Logger.getLogger();
-
-/*
-    @Override
-    protected String getActionUri() {
-        return null;
-    }
-
-    @Override
-    protected String getRequestMethod() {
-        return null;
-    }
-
-    @Test
-    @Override
-    protected void testExecute() throws Exception {
-        log.info("hello");
-        assertEquals("HELLO Assert Test",4, 5);
-    }
-
-    @Override
-    protected void testAccessControl() throws Exception {
-
-    }
-*/
 
     @Override
     protected String getActionUri() {
@@ -71,9 +49,12 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         MockHttpServletRequest existingActionServletRequest = new MockHttpServletRequest(
                 HttpPost.METHOD_NAME, Const.ResourceURIs.PROJECT);
         existingActionServletRequest.addHeader("Backdoor-Key", Config.BACKDOOR_KEY);
+        log.info("Creating Mock HTTP Servlet Request: " + "method = " + existingActionServletRequest.getMethod() +
+                " -- uri = " + existingActionServletRequest.getRequestURI());
+
         Action existingAction = actionFactory.getAction(existingActionServletRequest, HttpPost.METHOD_NAME);
         assertTrue(existingAction instanceof CreateProjectAction);
-        log.info("Test class type: " + existingAction);
+        log.info("[FEATURE] Test class type returned from ActionFactory: " + existingAction);
         log.info("Test complete.");
     }
 
@@ -110,10 +91,14 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
     @Test
     @Override
     protected void testExecute() throws Exception {
+        log.info("Test Begins.");
+        log.info("The testExecute method is running for the CreateProjectActionTest");
 
         InstructorAttributes instructor1ofCourse1 = typicalBundle.instructors.get("instructor1OfCourse1");
+        log.info("Creating Instructor: " + instructor1ofCourse1.getCourseId());
 
         loginAsInstructor(instructor1ofCourse1.getGoogleId());
+        log.info("Logging in as instructor: " + instructor1ofCourse1.getCourseId());
 
         ______TS("Not enough parameters");
 
@@ -122,91 +107,55 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         ______TS("Typical case");
 
         CourseAttributes course = typicalBundle.courses.get("typicalCourse1");
+        log.info("Creating Course: " + instructor1ofCourse1.getCourseId());
 
         String[] params = {
                 Const.ParamsNames.COURSE_ID, course.getId(),
         };
 
-        ProjectCreateRequest createRequest = getTypicalCreateRequest();
+        ProjectCreateRequest createRequest = getTypicalCreateRequest(course.getId());
+        log.info("[FEATURE] Creating Project Request: " + createRequest.toString());
+
 
         CreateProjectAction a = getAction(createRequest, params);
+        log.info("[FEATURE] Creating Create Project Action: " + a);
+
         JsonResult r = getJsonResult(a);
+        log.info("[FEATURE] Performing Create Project Action 'Execute()'");
 
+        // Test HTTP Status code returned
         assertEquals(HttpStatus.SC_OK, r.getStatusCode());
+        log.info("[FEATURE] Testing HTTP Response Status Code" + r.getStatusCode());
+
         ProjectData response = (ProjectData) r.getOutput();
+        log.info("[FEATURE] Response Data: " + response.toString());
 
 
-/*
-        ProjectAttributes createdProject =
-                //TODO: get logic method name from Michael
-                logic.getFeedbackSession(createRequest.getProjectName(), course.getId());
-        assertEquals(createdProject.getCourseId(), response.getCourseId());
-        assertEquals(createdProject.getTimeZone().getId(), response.getTimeZone());
-        assertEquals(createdProject.getFeedbackSessionName(), response.getProjectName());
-
-        assertEquals(createdProject.getInstructions(), response.getInstructions());
-
-        assertEquals(createdProject.getStartTime().toEpochMilli(), response.getSubmissionStartTimestamp());
-        assertEquals(createdProject.getEndTime().toEpochMilli(), response.getSubmissionEndTimestamp());
-        assertEquals(createdProject.getGracePeriodMinutes(), response.getGracePeriod().longValue());
-
-        assertEquals(SessionVisibleSetting.CUSTOM, response.getSessionVisibleSetting());
-        assertEquals(createdProject.getSessionVisibleFromTime().toEpochMilli(),
-                response.getCustomSessionVisibleTimestamp().longValue());
-        assertEquals(ResponseVisibleSetting.CUSTOM, response.getResponseVisibleSetting());
-        assertEquals(createdProject.getResultsVisibleFromTime().toEpochMilli(),
-                response.getCustomResponseVisibleTimestamp().longValue());
-
-        assertEquals(createdProject.isClosingEmailEnabled(), response.getIsClosingEmailEnabled());
-        assertEquals(createdProject.isPublishedEmailEnabled(), response.getIsPublishedEmailEnabled());
-
-        assertEquals(createdProject.getCreatedTime().toEpochMilli(), response.getCreatedAtTimestamp());
-        assertNull(createdProject.getDeletedTime());
-
-        assertEquals("new feedback session", response.getProjectName());
-        assertEquals("instructions", response.getInstructions());
-        assertEquals(1444003051000L, response.getSubmissionStartTimestamp());
-        assertEquals(1546003051000L, response.getSubmissionEndTimestamp());
-        assertEquals(5, response.getGracePeriod().longValue());
-
-        assertEquals(SessionVisibleSetting.CUSTOM, response.getSessionVisibleSetting());
-        assertEquals(1440003051000L, response.getCustomSessionVisibleTimestamp().longValue());
-
-        assertEquals(ResponseVisibleSetting.CUSTOM, response.getResponseVisibleSetting());
-        assertEquals(1547003051000L, response.getCustomResponseVisibleTimestamp().longValue());
-
-        assertFalse(response.getIsClosingEmailEnabled());
-        assertFalse(response.getIsPublishedEmailEnabled());
-
-        assertNotNull(response.getCreatedAtTimestamp());
-        assertNull(response.getDeletedAtTimestamp());
-
-        ______TS("Error: try to add the same session again");
+        // test CreateProjectAction object (ProjectDB facing) and ProjectData object returned from CreateProjectAction
+        assertEquals(createRequest.getProjectName(), response.getProjectName());
+        assertEquals(createRequest.getCourseID(), response.getCourseID());
+        assertEquals(createRequest.getProjMilestones(), response.getMilestones());
+        assertEquals(createRequest.getStudentList(), response.getStudentList());
+        ______TS("Error: Invalid parameters (invalid Project name > 38 characters)");
 
         assertThrows(InvalidHttpRequestBodyException.class, () -> {
-            getJsonResult(getAction(getTypicalCreateRequest(), params));
-        });
-
-        ______TS("Error: Invalid parameters (invalid session name > 38 characters)");
-
-        assertThrows(InvalidHttpRequestBodyException.class, () -> {
-            ProjectCreateRequest request = getTypicalCreateRequest();
+            ProjectCreateRequest request = getTypicalCreateRequest(course.getId());
             request.setProjectName(StringHelperExtension.generateStringOfLength(39));
             getJsonResult(getAction(request, params));
         });
 
-        ______TS("Unsuccessful case: test null session name");
+        ______TS("Unsuccessful case: test null project name");
 
         assertThrows(InvalidHttpRequestBodyException.class, () -> {
-            ProjectCreateRequest request = getTypicalCreateRequest();
+            ProjectCreateRequest request = getTypicalCreateRequest(course.getId());
             request.setProjectName(null);
 
             getJsonResult(getAction(request, params));
         });
 
-        ______TS("Add course with extra space (in middle and trailing)");
+        ______TS("Add project with extra space (in middle and trailing)");
 
-        createRequest = getTypicalCreateRequest();
+        createRequest = getTypicalCreateRequest(course.getId());
         createRequest.setProjectName("Name with extra  space ");
 
         a = getAction(createRequest, params);
@@ -215,58 +164,47 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         assertEquals(HttpStatus.SC_OK, r.getStatusCode());
         response = (ProjectData) r.getOutput();
 
-        assertEquals("Name with extra space", response.getFeedbackSessionName());
-*/
+        assertEquals("Name with extra space", response.getProjectName());
     }
 
-    @Test
-    public void testExecute_masqueradeMode_shouldCreateFeedbackSession() {
-        InstructorAttributes instructor1ofCourse1 = typicalBundle.instructors.get("instructor1OfCourse1");
-        CourseAttributes course = typicalBundle.courses.get("typicalCourse1");
-
-        loginAsAdmin();
-
-        String[] params = {
-                Const.ParamsNames.COURSE_ID, course.getId(),
-        };
-        params = addUserIdToParams(instructor1ofCourse1.getGoogleId(), params);
-
-        ProjectCreateRequest createRequest = getTypicalCreateRequest();
-
-        CreateProjectAction a = getAction(createRequest, params);
-        JsonResult r = getJsonResult(a);
-
-        assertEquals(HttpStatus.SC_OK, r.getStatusCode());
-    }
-
-
-    private ProjectCreateRequest getTypicalCreateRequest() {
+    private ProjectCreateRequest getTypicalCreateRequest(String courseId) {
+        // Create Milestones
         ArrayList<Milestone> milestonesList = new ArrayList<Milestone>();
-        Milestone testMilestone = new Milestone("Milestone 1", "Description for Milestone 1", new Date());
-        milestonesList.add(testMilestone);
 
+        // Using Calendar class to obtain 3 dates: today(), today() + 14 days, today() + 28 days
+        Calendar c = Calendar.getInstance();
+
+        // Add milestone 1
+        Date date1 = new Date();
+        Milestone testMilestone1 = new Milestone("Milestone 1", "Description for Milestone 1", date1);
+        milestonesList.add(testMilestone1);
+
+        // Add milestone 2
+        c.setTime(date1);
+        c.add(Calendar.DATE, 14);
+        Date date2 = new Date();
+        date2 = c.getTime();
+        Milestone testMilestone2 = new Milestone("Milestone 2", "Description for Milestone 2", date2);
+        milestonesList.add(testMilestone2);
+
+        // Add milestone 3
+        c.setTime(date1);
+        c.add(Calendar.DATE, 28);
+        Date date3 = new Date();
+        date3 = c.getTime();
+        Milestone testMilestone3 = new Milestone("Milestone 3", "Description for Milestone 2", date3);
+        milestonesList.add(testMilestone3);
+
+        // create student list
+        ArrayList<String> mockStudentList = new ArrayList<String>(Arrays.asList("bob@gmail.com", "alice@gmail.com", "sally@gmail.com"));
+
+        // Create ProjectCreateObject
         ProjectCreateRequest createRequest =
                 new ProjectCreateRequest();
         createRequest.setProjectName("new project");
+        createRequest.setCourseID(courseId);
         createRequest.setProjMilestones(milestonesList);
-        createRequest.setStudentList(new ArrayList<StudentsLogic>());
-
-
-
-        //createRequest.setInstructions("instructions");
-
-        //createRequest.setSubmissionStartTimestamp(1444003051000L);
-        //createRequest.setSubmissionEndTimestamp(1546003051000L);
-        //createRequest.setGracePeriod(5);
-
-        //createRequest.setSessionVisibleSetting(SessionVisibleSetting.CUSTOM);
-        //createRequest.setCustomSessionVisibleTimestamp(1440003051000L);
-
-        //createRequest.setResponseVisibleSetting(ResponseVisibleSetting.CUSTOM);
-        //createRequest.setCustomResponseVisibleTimestamp(1547003051000L);
-
-        //createRequest.setClosingEmailEnabled(false);
-        //createRequest.setPublishedEmailEnabled(false);
+        createRequest.setStudentList(mockStudentList);
 
         return createRequest;
     }

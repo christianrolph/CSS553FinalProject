@@ -51,25 +51,25 @@ class CreateProjectAction extends Action {
         ProjectAttributes ps =
                 ProjectAttributes
                         .builder(projectName)
+                        .withCourseId(createRequest.getCourseID())
                         .withMilestones(createRequest.getProjMilestones())
+                        .withStudentList(createRequest.getStudentList())
                         .build();
 
+        ProjectAttributes returnProject;
+
         try {
-            //TODO: get method name from Michael for createProject
-            logic.createProject(ps);
+            returnProject = logic.createProject(ps);
         } catch (EntityAlreadyExistsException | InvalidParametersException e) {
             throw new InvalidHttpRequestBodyException(e.getMessage(), e);
         }
 
-        //TODO: update with method names from ProjectAttribute class
-        //ps = getNonNullFeedbackSession(ps.getProjectName(), ps.getCourseId());
-        ProjectData output = new ProjectData(ps);
+        ProjectData output = new ProjectData(returnProject);
         InstructorPrivilegeData privilege = constructInstructorPrivileges(instructor, projectName);
         output.setPrivileges(privilege);
 
 
-        //return new JsonResult(output);
-        return new JsonResult("Test");
+        return new JsonResult(output);
     }
 
 }
