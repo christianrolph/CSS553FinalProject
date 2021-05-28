@@ -12,13 +12,13 @@ public class ProjectData extends ApiOutput {
     private final String projectName;
     private String courseID;
     private ArrayList<String> studentList;
-    private ArrayList<Milestone> ms;
-
+    private ArrayList<Milestone> milestones;
     private InstructorPrivilegeData privileges;
 
     public ProjectData(ProjectAttributes projectAttributes){
         this.projectName = projectAttributes.getProjectName();
-        this.ms = projectAttributes.getProjMilestones();
+        this.studentList = projectAttributes.getStudentList();
+        this.milestones = projectAttributes.getProjMilestones();
         this.studentList = projectAttributes.getStudentList();
     }
 
@@ -26,8 +26,10 @@ public class ProjectData extends ApiOutput {
         return projectName;
     }
 
-    public ArrayList<Milestone> getMS() {
-        return ms;
+    public String getCourseID(){ return courseID; }
+
+    public ArrayList<Milestone> getMilestones() {
+        return milestones;
     }
 
     public ArrayList<String> getStudentList() {
@@ -38,10 +40,12 @@ public class ProjectData extends ApiOutput {
         this.privileges = privileges;
     }
 
+    public String toString(){
+        return '\n' +
+                "Project Name:   " + this.getProjectName() + '\n' +
+                "Course ID:     " + this.getCourseID() + '\n' +
+                "Milestone:     " + getMilestones().toString() + '\n' +
+                "Student Names: " + getStudentList().toString() + '\n';
 
-
-
-
-
-
+    }
 }
