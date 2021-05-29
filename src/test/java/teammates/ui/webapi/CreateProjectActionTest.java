@@ -97,7 +97,7 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         InstructorAttributes instructor1ofCourse1 = typicalBundle.instructors.get("instructor1OfCourse1");
         log.info("Creating Instructor: " + instructor1ofCourse1.getCourseId());
 
-        // loginAsInstructor(instructor1ofCourse1.getGoogleId());
+        loginAsInstructor(instructor1ofCourse1.getGoogleId());
         log.info("Logging in as instructor: " + instructor1ofCourse1.getCourseId());
 
         ______TS("Not enough parameters");
