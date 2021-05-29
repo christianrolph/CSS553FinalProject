@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teammates.common.util.Assumption;
+import teammates.logic.core.StudentsLogic;
+import teammates.storage.entity.Course;
 import teammates.ui.output.Milestone;
 import teammates.storage.entity.Project;
-import teammates.common.util.*;
+import teammates.common.util.StringHelper;
+
 /**
  *
  * @author Tri27
@@ -18,14 +21,24 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     private ArrayList<String> studentList;
     private ArrayList<Milestone> projMilestones;
 
+    private ProjectAttributes(){
+    }
+
     private ProjectAttributes(String projectName) {
         this.projectName = projectName;
     }
 
-    private ProjectAttributes(String projectName, ArrayList<Milestone> projMilestones, ArrayList<String> studentEmails) {
+    private ProjectAttributes(String projectName, Milestone projMilestone, ArrayList<String> studentEmails) {
         this.projectName = projectName;
-        this.projMilestones = projMilestones;
+        this.projMilestones.add(projMilestone);
         this.studentList = studentEmails;
+    }
+
+    private ProjectAttributes(String projectName, String courseId, ArrayList<Milestone> mList, ArrayList<String> sList) {
+        this.projectName = projectName;
+        this.courseID = courseId;
+        this.projMilestones = mList;
+        this.studentList = sList;
     }
 
     /**
@@ -57,14 +70,10 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         this.projectName = projectName;
     }
 
-    public String getCourseID() {
-        return courseID;
-    }
+    public String getCourseId() { return this.courseID; }
 
-    public void setCourseID(String courseID) {
-        this.courseID = courseID;
-    }
-    
+    public void setCourseId(String courseID) { this.courseID = courseID; }
+
     public ArrayList<Milestone> getProjMilestones() {
         return projMilestones;
     }
@@ -84,8 +93,24 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     @Override
     public String toString(){
         return "projectName = " + this.projectName
+                + ", courseID = " + this.courseID
                 + ", milestones = " + this.projMilestones
                 + ", studentList = " + this.studentList;
+    }
+
+
+    /*
+    Extracts the attributes of a Project object and
+    returns them as a Course Attributes object.
+     */
+    public static ProjectAttributes valueOf(Project project) {
+        ProjectAttributes createdProjectAttributes =  new ProjectAttributes(
+                project.getProjectName(),
+                project.getCourseId(),
+                project.getProjMilestones(),
+                project.getStudentList());
+
+        return createdProjectAttributes;
     }
 
     // TODO finish implementing method
@@ -98,7 +123,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         if (this.getStudentList().isEmpty()){
             invalidityList.add("INVALID_STUDENT_LIST");
         }
-        if (this.getCourseID().equals(null) || this.getCourseID() == ""){
+        if (this.getCourseId().equals(null) || this.getCourseId() == ""){
             invalidityList.add("INVALID_COURSE_ID");
         }
         if(invalidityList.isEmpty()){
@@ -115,11 +140,19 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         return new Project(this.projectName,this.projMilestones,this.studentList);
     }
 
-    // TODO finish implementing method
     @Override
     public void sanitizeForSaving() {
-        this.projectName.trim();
-        
+
+        StringHelper.trimIfNotNull(projectName);
+        StringHelper.trimIfNotNull(courseID);
+        for(int i = 0 ; i < studentList.size(); i++){
+            StringHelper.trimIfNotNull(studentList.get(i));
+        }
+        for(int i = 0 ; i < projMilestones.size(); i++){
+            StringHelper.trimIfNotNull(projMilestones.get(i).getName());
+            StringHelper.trimIfNotNull(projMilestones.get(i).getDescription());
+        }
+
     }
 
     /**
@@ -128,6 +161,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     public void update(UpdateOptions updateOptions) {
         updateOptions.milestonesOption.ifPresent(pM -> projMilestones = pM);
         updateOptions.studentsListOption.ifPresent(sL -> studentList = sL);
+        updateOptions.courseIdOption.ifPresent(cID -> courseID = cID);
     }
 
     /**
@@ -165,8 +199,9 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     public static class UpdateOptions {
         private String projectName;
 
-        private UpdateOption<ArrayList<Milestone>> milestonesOption = UpdateOption.empty();
-        private UpdateOption<ArrayList<String>> studentsListOption = UpdateOption.empty();
+        private EntityAttributes.UpdateOption<ArrayList<Milestone>> milestonesOption = EntityAttributes.UpdateOption.empty();
+        private EntityAttributes.UpdateOption<ArrayList<String>> studentsListOption = EntityAttributes.UpdateOption.empty();
+        private EntityAttributes.UpdateOption<String> courseIdOption = EntityAttributes.UpdateOption.empty();
 
         // Constructor requires non-null project name
         private UpdateOptions(String projectName) {
@@ -197,7 +232,7 @@ public class ProjectAttributes extends EntityAttributes<Project> {
             public Builder withNewMilestone(ArrayList<Milestone> ms) {
                 Assumption.assertNotNull(ms);
 
-                updateOptions.milestonesOption = UpdateOption.of(ms);
+                updateOptions.milestonesOption = EntityAttributes.UpdateOption.of(ms);
                 return thisBuilder;
             }
 
@@ -221,17 +256,24 @@ public class ProjectAttributes extends EntityAttributes<Project> {
             this.updateOptions = updateOptions;
         }
 
-        public B withMilestone(ArrayList<Milestone> ms) {
+        public B withMilestones(ArrayList<Milestone> ms) {
             Assumption.assertNotNull(ms);
 
-            updateOptions.milestonesOption = UpdateOption.of(ms);
+            updateOptions.milestonesOption = EntityAttributes.UpdateOption.of(ms);
             return thisBuilder;
         }
 
         public B withStudentList(ArrayList<String> studentList) {
             Assumption.assertNotNull(studentList);
 
-            updateOptions.studentsListOption = UpdateOption.of(studentList);
+            updateOptions.studentsListOption = EntityAttributes.UpdateOption.of(studentList);
+            return thisBuilder;
+        }
+
+        public B withCourseId(String courseId) {
+            Assumption.assertNotNull(courseId);
+
+            updateOptions.courseIdOption = EntityAttributes.UpdateOption.of(courseId);
             return thisBuilder;
         }
 
