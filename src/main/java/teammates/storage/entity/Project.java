@@ -76,6 +76,10 @@ public class Project extends BaseEntity {
         return projMilestones;
     }
 
+    public String getCourseId() { return this.courseID; }
+
+    public void setCourseId(String courseID) { this.courseID = courseID; }
+
     public void addProjMilestone(Milestone projMilestone) {
         projMilestones.add(projMilestone);
     }
