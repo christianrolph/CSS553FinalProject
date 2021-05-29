@@ -133,26 +133,26 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
 
 
         // test CreateProjectAction object (ProjectDB facing) and ProjectData object returned from CreateProjectAction
-        assertEquals(createRequest.getProjectName(), response.getProjectName());
-        assertEquals(createRequest.getCourseID(), response.getCourseID());
+        assertEquals("Expected and actual project names should match", createRequest.getProjectName(), response.getProjectName());
+        assertEquals("Expected and actual Course IDs should match", createRequest.getCourseID(), response.getCourseID());
         ArrayList<Milestone> requestMilestones = createRequest.getProjMilestones();
         ArrayList<Milestone> responseMilestones = response.getMilestones();
-        assertEquals(requestMilestones.size(), responseMilestones.size());
+        assertEquals("Expected and actual Number of Milestones should match.", requestMilestones.size(), responseMilestones.size());
         for (int iIndex = 0; iIndex < requestMilestones.size(); iIndex++)
         {
-            assertEquals(requestMilestones.get(iIndex).getName(), responseMilestones.get(iIndex).getName());
+            assertEquals("Expected and actual Milestone names should match", requestMilestones.get(iIndex).getName(), responseMilestones.get(iIndex).getName());
         }
         assertEquals(createRequest.getStudentList(), response.getStudentList());
 
 
         ______TS("Add project with extra space (in middle and trailing)");
         createRequest = getTypicalCreateRequest(course.getId());
-        createRequest.setProjectName("Name with extra  space ");
+        createRequest.setProjectName("Name with extra space ");
 
         a = getAction(createRequest, params);
         r = getJsonResult(a);
 
-        assertEquals(HttpStatus.SC_OK, r.getStatusCode());
+        assertEquals("Expected and actual HTTP status should match", HttpStatus.SC_OK, r.getStatusCode());
         response = (ProjectData) r.getOutput();
 
         assertEquals("Name with extra space", response.getProjectName());

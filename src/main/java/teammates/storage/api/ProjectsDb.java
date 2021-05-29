@@ -34,19 +34,18 @@ public class ProjectsDb extends EntitiesDb<Project, ProjectAttributes> {
     private static final Logger log = Logger.getLogger();
 
     @Override
-    public ProjectAttributes createEntity(ProjectAttributes project)
-        throws InvalidParametersException, EntityAlreadyExistsException {
-        
-	    ProjectAttributes createdProject = super.createEntity(project);
-        log.info("Entity created: " + JsonUtils.toJson(createdProject));
-	    return createdProject;
+    public ProjectAttributes createEntity(ProjectAttributes project) {
+
+        // access to database ends here
+        // further implementation exceeds project requirements and scope
+        // this code mocks what would occur with database connection
+        Project entity = project.toEntity();
+        log.info("Entity created: " + JsonUtils.toJson(entity));
+
+        return makeAttributes(entity);
     }
-    //getProject
-    //updateProject
-    //deleteProject
 
 
-    // 
     @Override
     public boolean hasExistingEntities(ProjectAttributes entityToCreate)
     {
@@ -55,17 +54,16 @@ public class ProjectsDb extends EntitiesDb<Project, ProjectAttributes> {
         return false;
     }
 
-    //
+
     @Override
     LoadType<Project> load() {
         return ofy().load().type(Project.class);
     }
 
-    // 
+
     @Override
     ProjectAttributes makeAttributes(Project entity) {
         Assumption.assertNotNull(entity);
-
         return ProjectAttributes.valueOf(entity);
     }
       
