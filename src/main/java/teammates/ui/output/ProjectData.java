@@ -17,9 +17,9 @@ public class ProjectData extends ApiOutput {
 
     public ProjectData(ProjectAttributes projectAttributes){
         this.projectName = projectAttributes.getProjectName();
+        this.courseID = projectAttributes.getCourseId();
         this.studentList = projectAttributes.getStudentList();
         this.milestones = projectAttributes.getProjMilestones();
-        this.studentList = projectAttributes.getStudentList();
     }
 
     public String getProjectName() {

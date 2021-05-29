@@ -51,7 +51,7 @@ public class Project extends BaseEntity {
     }
 
     /**
-     * Generates an unique ID for the student.
+     * Generates an unique ID for the project.
      */
     public static String generateId(String projectName, String courseId) {
         return projectName + '%' + courseId;

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import teammates.common.util.Logger;
 import com.googlecode.objectify.cmd.LoadType;
 import teammates.common.datatransfer.attributes.ProjectAttributes;
+import teammates.storage.entity.Course;
 import teammates.storage.entity.Project;
 import teammates.common.util.Assumption;
 import teammates.common.util.JsonUtils;
@@ -49,11 +50,9 @@ public class ProjectsDb extends EntitiesDb<Project, ProjectAttributes> {
     @Override
     public boolean hasExistingEntities(ProjectAttributes entityToCreate)
     {
-        return !load()
-                .filterKey(Key.create(Project.class,
-                        Project.generateId(entityToCreate.getProjectName(), entityToCreate.getCourseId())))
-                .list()
-                .isEmpty();
+        // access to database ends here
+        // further implementation exceeds project requirements and scope
+        return false;
     }
 
     //

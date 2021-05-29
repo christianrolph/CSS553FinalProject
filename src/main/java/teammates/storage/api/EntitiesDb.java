@@ -81,7 +81,6 @@ abstract class EntitiesDb<E extends BaseEntity, A extends EntityAttributes<E>> {
 
         E entity = entityToAdd.toEntity();
 
-        ofy().save().entity(entity).now();
         log.info("Entity created: " + JsonUtils.toJson(entityToAdd));
 
         return makeAttributes(entity);

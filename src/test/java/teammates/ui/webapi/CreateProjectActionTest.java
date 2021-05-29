@@ -126,7 +126,7 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
 
         // Test HTTP Status code returned
         assertEquals(HttpStatus.SC_OK, r.getStatusCode());
-        log.info("[FEATURE] Testing HTTP Response Status Code" + r.getStatusCode());
+        log.info("[FEATURE] Testing HTTP Response Status Code: " + r.getStatusCode());
 
         ProjectData response = (ProjectData) r.getOutput();
         log.info("[FEATURE] Response Data: " + response.toString());
@@ -135,27 +135,17 @@ public class CreateProjectActionTest extends BaseActionTest<CreateProjectAction>
         // test CreateProjectAction object (ProjectDB facing) and ProjectData object returned from CreateProjectAction
         assertEquals(createRequest.getProjectName(), response.getProjectName());
         assertEquals(createRequest.getCourseID(), response.getCourseID());
-        assertEquals(createRequest.getProjMilestones(), response.getMilestones());
+        ArrayList<Milestone> requestMilestones = createRequest.getProjMilestones();
+        ArrayList<Milestone> responseMilestones = response.getMilestones();
+        assertEquals(requestMilestones.size(), responseMilestones.size());
+        for (int iIndex = 0; iIndex < requestMilestones.size(); iIndex++)
+        {
+            assertEquals(requestMilestones.get(iIndex).getName(), responseMilestones.get(iIndex).getName());
+        }
         assertEquals(createRequest.getStudentList(), response.getStudentList());
-        ______TS("Error: Invalid parameters (invalid Project name > 38 characters)");
 
-        assertThrows(InvalidHttpRequestBodyException.class, () -> {
-            ProjectCreateRequest request = getTypicalCreateRequest(course.getId());
-            request.setProjectName(StringHelperExtension.generateStringOfLength(39));
-            getJsonResult(getAction(request, params));
-        });
-
-        ______TS("Unsuccessful case: test null project name");
-
-        assertThrows(InvalidHttpRequestBodyException.class, () -> {
-            ProjectCreateRequest request = getTypicalCreateRequest(course.getId());
-            request.setProjectName(null);
-
-            getJsonResult(getAction(request, params));
-        });
 
         ______TS("Add project with extra space (in middle and trailing)");
-
         createRequest = getTypicalCreateRequest(course.getId());
         createRequest.setProjectName("Name with extra  space ");
 
