@@ -8,7 +8,8 @@ import teammates.logic.core.StudentsLogic;
 import teammates.storage.entity.Course;
 import teammates.ui.output.Milestone;
 import teammates.storage.entity.Project;
-import teammates.common.util.*;
+import teammates.common.util.StringHelper;
+
 /**
  *
  * @author Tri27
@@ -133,10 +134,18 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         return createdProject;
     }
 
-    // TODO finish implementing method
     @Override
     public void sanitizeForSaving() {
-        this.projectName.trim();
+
+        StringHelper.trimIfNotNull(projectName);
+        StringHelper.trimIfNotNull(courseID);
+        for(int i = 0 ; i < studentList.size(); i++){
+            StringHelper.trimIfNotNull(studentList.get(i));
+        }
+        for(int i = 0 ; i < projMilestones.size(); i++){
+            StringHelper.trimIfNotNull(projMilestones.get(i).getName());
+            StringHelper.trimIfNotNull(projMilestones.get(i).getDescription());
+        }
 
     }
 
