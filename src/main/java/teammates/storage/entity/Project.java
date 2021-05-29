@@ -6,11 +6,13 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Translate;
+import java.util.ArrayList;
 import teammates.ui.output.Milestone;
 import java.util.ArrayList;
 import java.util.List;
 
 import teammates.common.util.Const;
+import teammates.ui.output.Milestone;
 
 /**
  *
@@ -20,7 +22,7 @@ import teammates.common.util.Const;
 public class Project extends BaseEntity {
     //variables
   
-    
+
     private String projectName;
     private String courseID;
     private ArrayList<String> studentList;
@@ -38,6 +40,13 @@ public class Project extends BaseEntity {
     private Project(String projectName, Milestone projMilestone, ArrayList<String> studentEmails) {
         this.projectName = projectName;
         this.projMilestones.add(projMilestone);
+        this.studentList = studentEmails;
+    }
+
+    public Project(String projectName, String courseID, ArrayList<Milestone> projMilestones, ArrayList<String> studentEmails) {
+        this.projectName = projectName;
+        this.courseID = courseID;
+        this.projMilestones = projMilestones;
         this.studentList = studentEmails;
     }
 
@@ -83,7 +92,7 @@ public class Project extends BaseEntity {
     public void addProjMilestone(Milestone projMilestone) {
         projMilestones.add(projMilestone);
     }
-    
+
     public void removeProjMilestone(Milestone projMilestone) {
         projMilestones.remove(projMilestone);
     }
@@ -100,11 +109,11 @@ public class Project extends BaseEntity {
                 + ", studentList = " + this.studentList;
     }
 
-    
-
-    
 
 
-    
-    
+
+
+
+
+
 }

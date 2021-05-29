@@ -8,7 +8,7 @@ import teammates.logic.core.StudentsLogic;
 import teammates.storage.entity.Course;
 import teammates.ui.output.Milestone;
 import teammates.storage.entity.Project;
-
+import teammates.common.util.*;
 /**
  *
  * @author Tri27
@@ -25,12 +25,6 @@ public class ProjectAttributes extends EntityAttributes<Project> {
 
     private ProjectAttributes(String projectName) {
         this.projectName = projectName;
-    }
-
-    private ProjectAttributes(String projectName, Milestone projMilestone, ArrayList<String> studentEmails) {
-        this.projectName = projectName;
-        this.projMilestones.add(projMilestone);
-        this.studentList = studentEmails;
     }
 
     private ProjectAttributes(String projectName, String courseId, ArrayList<Milestone> mList, ArrayList<String> sList) {
@@ -114,18 +108,36 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     // TODO finish implementing method
     @Override
     public List<String> getInvalidityInfo() {
-        return null;
+        List<String> invalidityList = new ArrayList();
+        if (this.getProjectName() == null){
+            invalidityList.add("INVALID_PROJECT_NAME");
+        }
+        if (this.getStudentList().isEmpty()){
+            invalidityList.add("INVALID_STUDENT_LIST");
+        }
+        if (this.getCourseId().equals(null) || this.getCourseId() == ""){
+            invalidityList.add("INVALID_COURSE_ID");
+        }
+        if(invalidityList.isEmpty()){
+            return invalidityList;
+        }
+        else{
+            return null;
+        }
     }
 
     // TODO finish implementing method
     @Override
     public Project toEntity() {
-        return null;
+        Project createdProject = new Project(this.projectName, this.courseID, this.projMilestones,this.studentList);
+        return createdProject;
     }
 
     // TODO finish implementing method
     @Override
     public void sanitizeForSaving() {
+        this.projectName.trim();
+
     }
 
     /**
