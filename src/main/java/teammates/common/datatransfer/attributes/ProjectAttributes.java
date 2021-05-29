@@ -5,6 +5,7 @@ import java.util.List;
 
 import teammates.common.util.Assumption;
 import teammates.logic.core.StudentsLogic;
+import teammates.storage.entity.Course;
 import teammates.ui.output.Milestone;
 import teammates.storage.entity.Project;
 
@@ -30,6 +31,13 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         this.projectName = projectName;
         this.projMilestones.add(projMilestone);
         this.studentList = studentEmails;
+    }
+
+    private ProjectAttributes(String projectName, String courseId, ArrayList<Milestone> mList, ArrayList<String> sList) {
+        this.projectName = projectName;
+        this.courseID = courseId;
+        this.projMilestones = mList;
+        this.studentList = sList;
     }
 
     /**
@@ -61,6 +69,10 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         this.projectName = projectName;
     }
 
+    public String getCourseId() { return this.courseID; }
+
+    public void setCourseId(String courseID) { this.courseID = courseID; }
+
     public ArrayList<Milestone> getProjMilestones() {
         return projMilestones;
     }
@@ -83,6 +95,20 @@ public class ProjectAttributes extends EntityAttributes<Project> {
                 + ", courseID = " + this.courseID
                 + ", milestones = " + this.projMilestones
                 + ", studentList = " + this.studentList;
+    }
+
+    /*
+    Extracts the attributes of a Project object and
+    returns them as a Course Attributes object.
+     */
+    public static ProjectAttributes valueOf(Project project) {
+        ProjectAttributes createdProjectAttributes =  new ProjectAttributes(
+                project.getProjectName(),
+                project.getCourseId(),
+                project.getProjMilestones(),
+                project.getStudentList());
+
+        return createdProjectAttributes;
     }
 
     // TODO finish implementing method
