@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import teammates.common.util.Assumption;
-import teammates.logic.core.StudentsLogic;
 import teammates.ui.output.Milestone;
 import teammates.storage.entity.Project;
-
+import teammates.common.util.*;
 /**
  *
  * @author Tri27
@@ -19,16 +18,13 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     private ArrayList<String> studentList;
     private ArrayList<Milestone> projMilestones;
 
-    private ProjectAttributes(){
-    }
-
     private ProjectAttributes(String projectName) {
         this.projectName = projectName;
     }
 
-    private ProjectAttributes(String projectName, Milestone projMilestone, ArrayList<String> studentEmails) {
+    private ProjectAttributes(String projectName, ArrayList<Milestone> projMilestones, ArrayList<String> studentEmails) {
         this.projectName = projectName;
-        this.projMilestones.add(projMilestone);
+        this.projMilestones = projMilestones;
         this.studentList = studentEmails;
     }
 
@@ -61,7 +57,15 @@ public class ProjectAttributes extends EntityAttributes<Project> {
         this.projectName = projectName;
     }
 
-    public ArrayList<Milestone> getProjMilestons() {
+    public String getCourseID() {
+        return courseID;
+    }
+
+    public void setCourseID(String courseID) {
+        this.courseID = courseID;
+    }
+    
+    public ArrayList<Milestone> getProjMilestones() {
         return projMilestones;
     }
 
@@ -87,18 +91,35 @@ public class ProjectAttributes extends EntityAttributes<Project> {
     // TODO finish implementing method
     @Override
     public List<String> getInvalidityInfo() {
-        return null;
+        List<String> invalidityList = new ArrayList();
+        if (this.getProjectName() == null){
+            invalidityList.add("INVALID_PROJECT_NAME");
+        }
+        if (this.getStudentList().isEmpty()){
+            invalidityList.add("INVALID_STUDENT_LIST");
+        }
+        if (this.getCourseID().equals(null) || this.getCourseID() == ""){
+            invalidityList.add("INVALID_COURSE_ID");
+        }
+        if(invalidityList.isEmpty()){
+            return invalidityList;
+        }
+        else{
+            return null;
+        }
     }
 
     // TODO finish implementing method
     @Override
     public Project toEntity() {
-        return null;
+        return new Project(this.projectName,this.projMilestones,this.studentList);
     }
 
     // TODO finish implementing method
     @Override
     public void sanitizeForSaving() {
+        this.projectName.trim();
+        
     }
 
     /**

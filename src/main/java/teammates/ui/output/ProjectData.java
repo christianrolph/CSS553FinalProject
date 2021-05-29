@@ -11,14 +11,14 @@ import java.util.ArrayList;
 public class ProjectData extends ApiOutput {
 
     private final String projectName;
-    private final Milestone ms;
-    private final ArrayList<StudentsLogic> studentList;
+    private final ArrayList<Milestone> ms;
+    private final ArrayList<String> studentList;
 
     private InstructorPrivilegeData privileges;
 
     public ProjectData(ProjectAttributes projectAttributes){
         this.projectName = projectAttributes.getProjectName();
-        this.ms = projectAttributes.getProjMilestone();
+        this.ms = projectAttributes.getProjMilestones();
         this.studentList = projectAttributes.getStudentList();
     }
 
@@ -26,11 +26,11 @@ public class ProjectData extends ApiOutput {
         return projectName;
     }
 
-    public Milestone getMS() {
+    public ArrayList<Milestone> getMS() {
         return ms;
     }
 
-    public ArrayList<StudentsLogic> getStudentList() {
+    public ArrayList<String> getStudentList() {
         return studentList;
     }
 
