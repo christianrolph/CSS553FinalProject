@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import teammates.common.util.Logger;
 import com.googlecode.objectify.cmd.LoadType;
 import teammates.common.datatransfer.attributes.ProjectAttributes;
+import teammates.storage.entity.Course;
 import teammates.storage.entity.Project;
 import teammates.common.util.Assumption;
 import teammates.common.util.JsonUtils;
@@ -33,40 +34,36 @@ public class ProjectsDb extends EntitiesDb<Project, ProjectAttributes> {
     private static final Logger log = Logger.getLogger();
 
     @Override
-    public ProjectAttributes createEntity(ProjectAttributes project)
-        throws InvalidParametersException, EntityAlreadyExistsException {
-        
-	    ProjectAttributes createdProject = super.createEntity(project);
-        log.info("Entity created: " + JsonUtils.toJson(createdProject));
-	    return createdProject;
+    public ProjectAttributes createEntity(ProjectAttributes project) {
+
+        // access to database ends here
+        // further implementation exceeds project requirements and scope
+        // this code mocks what would occur with database connection
+        Project entity = project.toEntity();
+        log.info("Entity created: " + JsonUtils.toJson(entity));
+
+        return makeAttributes(entity);
     }
-    //getProject
-    //updateProject
-    //deleteProject
 
 
-    // 
     @Override
     public boolean hasExistingEntities(ProjectAttributes entityToCreate)
     {
-        return !load()
-                .filterKey(Key.create(Project.class,
-                        Project.generateId(entityToCreate.getProjectName(), entityToCreate.getCourseId())))
-                .list()
-                .isEmpty();
+        // access to database ends here
+        // further implementation exceeds project requirements and scope
+        return false;
     }
 
-    //
+
     @Override
     LoadType<Project> load() {
         return ofy().load().type(Project.class);
     }
 
-    // 
+
     @Override
     ProjectAttributes makeAttributes(Project entity) {
         Assumption.assertNotNull(entity);
-
         return ProjectAttributes.valueOf(entity);
     }
       

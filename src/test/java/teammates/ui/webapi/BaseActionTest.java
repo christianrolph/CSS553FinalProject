@@ -106,7 +106,7 @@ public abstract class BaseActionTest<T extends Action> extends BaseComponentTest
         return getAction(null, null, cookies, params);
     }
 
-/*    @BeforeMethod*/
+    @BeforeMethod
     public void beforeTestMethodSetup() {
         prepareTestData();
     }
