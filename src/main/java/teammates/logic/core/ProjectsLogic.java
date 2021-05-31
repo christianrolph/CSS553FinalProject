@@ -32,25 +32,5 @@ public final class ProjectsLogic {
             throws InvalidParametersException, EntityAlreadyExistsException {
         return projDb.createEntity(projectToAdd);
         
-    }
-    
-    //getProject -COMPLETE
-    //public ProjectAttributes getProject(String projectName){
-    //    return projDb.getProject(projectName);
-    //}
-    
-    //updateProject -IN WORK
-    //public ProjectAttributes updateProject(ProjectAttributes.UpdateOption updateOptions)
-    //        throws InvalidParameterException, EntityDoesNotExistException {
-        
-    //}
-    
-    //deleteProject -IN WORK
-    //public void deleteProject(String projectName){
-    //    AttributesDeletionQuery query = AttributesDeletionQuery.builder()
-    //            .withProjectName(projectName)
-    //            .build();
-
-    //    projDb.deleteProject(projectName);
-    //}
+    }   
 }
