@@ -21,8 +21,6 @@ import teammates.ui.output.Milestone;
 @Entity
 public class Project extends BaseEntity {
     //variables
-  
-
     private String projectName;
     private String courseID;
     private ArrayList<String> studentList;
@@ -56,8 +54,6 @@ public class Project extends BaseEntity {
     public static String generateId(String projectName, String courseId) {
         return projectName + '%' + courseId;
     }
-
-
 
     public boolean assignStudent(String studentEmail){
         studentList.add(studentEmail);
@@ -108,12 +104,5 @@ public class Project extends BaseEntity {
                 + ", milestones = " + this.projMilestones
                 + ", studentList = " + this.studentList;
     }
-
-
-
-
-
-
-
 
 }
